@@ -1,0 +1,138 @@
+/* =========================================================
+   BASE.CSS — Reset, design tokens, typography, buttons
+   ========================================================= */
+
+/* ===== Reset ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+img, svg { display: block; max-width: 100%; }
+a { text-decoration: none; color: inherit; }
+ul { list-style: none; }
+button { font: inherit; cursor: pointer; border: none; background: none; }
+
+/* ===== Design Tokens ===== */
+:root {
+  /* Colors */
+  --color-bg: #FBF6F4;          /* soft blush ivory background */
+  --color-surface: #FFFFFF;     /* card surfaces */
+  --color-surface-alt: #F5EBE7; /* alternate section tint */
+  --color-primary: #B76E79;     /* dusty rose — main accent */
+  --color-primary-dark: #7D4351;/* deep plum-rose — headings, nav */
+  --color-accent: #C9A66B;      /* soft gold — hovers, highlights */
+  --color-text: #3A2C2E;        /* warm near-black text */
+  --color-muted: #8B7377;       /* muted mauve-grey secondary text */
+  --color-border: #E7D9D4;
+
+  /* Typography */
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-body: 'Jost', 'Segoe UI', sans-serif;
+
+  /* Layout */
+  --container-w: 1140px;
+  --radius: 14px;
+  --radius-sm: 8px;
+  --shadow: 0 12px 30px -14px rgba(125, 67, 81, 0.28);
+}
+
+/* ===== Base ===== */
+body {
+  font-family: var(--font-body);
+  color: var(--color-text);
+  background: var(--color-bg);
+  line-height: 1.6;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  color: var(--color-primary-dark);
+  font-weight: 600;
+  line-height: 1.15;
+}
+
+.container {
+  width: 100%;
+  max-width: var(--container-w);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.italic { font-style: italic; font-weight: 500; }
+
+.eyebrow {
+  display: inline-block;
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+.eyebrow.center { display: block; text-align: center; }
+
+.section-title { font-size: clamp(1.8rem, 3vw, 2.4rem); margin-bottom: 10px; }
+.section-title.center { text-align: center; }
+.section-sub { color: var(--color-muted); max-width: 560px; }
+.section-sub.center { text-align: center; margin: 0 auto 40px; }
+
+/* Section rhythm (shared by every section file) */
+section { padding: 88px 0; }
+
+/* ===== Buttons ===== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 28px;
+  border-radius: 999px;
+  font-weight: 500;
+  font-size: 0.95rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, color 0.2s ease;
+  white-space: nowrap;
+}
+.btn-primary {
+  background: var(--color-primary-dark);
+  color: #fff;
+  box-shadow: var(--shadow);
+}
+.btn-primary:hover { background: var(--color-primary); transform: translateY(-2px); }
+
+.btn-outline {
+  background: transparent;
+  color: var(--color-primary-dark);
+  border: 1.5px solid var(--color-primary-dark);
+}
+.btn-outline:hover {
+  background: var(--color-primary-dark);
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+.btn-small { padding: 10px 18px; font-size: 0.85rem; }
+.btn-full { width: 100%; }
+
+/* ===== Back to top (global, floats over every section) ===== */
+.back-to-top {
+  position: fixed;
+  right: 22px;
+  bottom: 22px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--color-primary-dark);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  box-shadow: var(--shadow);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(10px);
+  transition: opacity 0.25s ease, transform 0.25s ease, background 0.2s ease;
+  z-index: 90;
+}
+.back-to-top.is-visible { opacity: 1; pointer-events: auto; transform: translateY(0); }
+.back-to-top:hover { background: var(--color-primary); }

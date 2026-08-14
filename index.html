@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Matalis Beauty Hub — Define Your Beauty</title>
+  <meta name="description" content="Matalis Beauty Hub — Eyelash Extension, Lash Lift, Brow Bomber, Threading & Nail Treatment. Buka setiap hari 09.00–21.00. Booking langsung via WhatsApp.">
+
+  <!-- Google Fonts: Fraunces (display) + Jost (body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets — one file per section, base.css must load first (tokens + resets) -->
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/header.css">
+  <link rel="stylesheet" href="css/hero.css">
+  <link rel="stylesheet" href="css/about.css">
+  <link rel="stylesheet" href="css/services.css">
+  <link rel="stylesheet" href="css/gallery.css">
+  <link rel="stylesheet" href="css/pricelist.css">
+  <link rel="stylesheet" href="css/testimonials.css">
+  <link rel="stylesheet" href="css/contact.css">
+  <link rel="stylesheet" href="css/footer.css">
+</head>
+<body>
+
+  <!-- Each data-include placeholder is swapped for the real section by js/includes.js -->
+  <div data-include="sections/header.html"></div>
+
+  <main>
+    <div data-include="sections/hero.html"></div>
+    <div data-include="sections/about.html"></div>
+    <div data-include="sections/services.html"></div>
+    <div data-include="sections/gallery.html"></div>
+    <div data-include="sections/pricelist.html"></div>
+    <div data-include="sections/testimonials.html"></div>
+    <div data-include="sections/contact.html"></div>
+  </main>
+
+  <div data-include="sections/footer.html"></div>
+
+  <!-- Back to top -->
+  <a href="#top" class="back-to-top" id="back-to-top" aria-label="Kembali ke atas">↑</a>
+
+  <!-- includes.js loads the sections above, then main.js wires up interactivity -->
+  <script src="js/includes.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,31 @@
+/* =========================================================
+   TESTIMONIALS.CSS
+   ========================================================= */
+
+.testimonials { background: var(--color-bg); }
+.testimonial-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 48px;
+}
+.testimonial-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 28px;
+}
+.stars { color: var(--color-accent); letter-spacing: 2px; margin-bottom: 14px; }
+.testimonial-card p { color: var(--color-text); margin-bottom: 20px; font-size: 0.95rem; }
+.testimonial-author { display: flex; flex-direction: column; }
+.author-name { font-weight: 600; color: var(--color-primary-dark); }
+.author-service { font-size: 0.8rem; color: var(--color-muted); }
+.review-cta { text-align: center; margin-top: 40px; }
+
+/* ----- Responsive ----- */
+@media (max-width: 1024px) {
+  .testimonial-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 840px) {
+  .testimonial-grid { grid-template-columns: 1fr; }
+}
