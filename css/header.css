@@ -6,7 +6,7 @@
   position: sticky;
   top: 0;
   z-index: 100;
-  background: rgba(253, 116, 159, 0.9); /* pink FD749F + blur */
+  background: rgba(253, 116, 159, 0.9); /* pink FF709C + blur */
   backdrop-filter: blur(10px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.25);
 }
