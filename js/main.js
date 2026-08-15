@@ -99,7 +99,7 @@ document.addEventListener('sections:loaded', () => {
   // TODO: ganti dengan Web App URL dari Google Apps Script kamu sendiri
   // (lihat panduan di file google-apps-script.gs). Contoh:
   // 'https://script.google.com/macros/s/AKfycb.../exec'
-  const GOOGLE_SHEET_URL = 'PASTE_WEB_APP_URL_DI_SINI';
+  const GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbyXe1TzDDonex39xKdj9YV9LDDKuJyXakJpTRUpbO-wc5wlINLhENk7FohpeUN3pRZ_WA/exec';
 
   const contactForm = document.getElementById('contact-form');
   if (contactForm) {
@@ -118,7 +118,7 @@ document.addEventListener('sections:loaded', () => {
       //    Pakai FormData supaya field-nya kebaca sebagai e.parameter di Apps
       //    Script (nama, email, layanan, terapis, pesan — HARUS sama persis
       //    dengan yang dibaca di doPost() pada Code.gs).
-      if (GOOGLE_SHEET_URL && GOOGLE_SHEET_URL !== 'PASTE_WEB_APP_URL_DI_SINI') {
+      if (GOOGLE_SHEET_URL && GOOGLE_SHEET_URL !== 'https://script.google.com/macros/s/AKfycbyXe1TzDDonex39xKdj9YV9LDDKuJyXakJpTRUpbO-wc5wlINLhENk7FohpeUN3pRZ_WA/exec') {
         const sheetData = new FormData();
         sheetData.append('nama', name);
         sheetData.append('email', email);
