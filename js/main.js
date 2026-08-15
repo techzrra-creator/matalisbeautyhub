@@ -9,7 +9,6 @@ document.addEventListener('sections:loaded', () => {
   // ===== Mobile Nav Toggle =====
   const navToggle = document.getElementById('nav-toggle');
   const mainNav = document.getElementById('main-nav');
-
   if (navToggle && mainNav) {
     navToggle.addEventListener('click', () => {
       const isOpen = mainNav.classList.toggle('is-open');
@@ -17,7 +16,6 @@ document.addEventListener('sections:loaded', () => {
       navToggle.setAttribute('aria-expanded', String(isOpen));
     });
 
-    // Close mobile menu after tapping a link
     mainNav.querySelectorAll('a').forEach((link) => {
       link.addEventListener('click', () => {
         mainNav.classList.remove('is-open');
@@ -35,12 +33,11 @@ document.addEventListener('sections:loaded', () => {
     });
   }
 
-  // ===== Gallery carousels (swipe via CSS, buttons/dots via JS) =====
+  // ===== Gallery carousels =====
   document.querySelectorAll('.gallery-track').forEach((track) => {
     const slides = track.querySelectorAll('.gallery-slide');
     const dotsWrap = document.querySelector(`.gallery-dots[data-dots-for="${track.id}"]`);
 
-    // Build dots
     if (dotsWrap) {
       slides.forEach((_, i) => {
         const dot = document.createElement('button');
@@ -53,7 +50,6 @@ document.addEventListener('sections:loaded', () => {
       });
     }
 
-    // Keep dots in sync while swiping/scrolling
     const syncDots = () => {
       if (!dotsWrap) return;
       const trackCenter = track.scrollLeft + track.clientWidth / 2;
@@ -67,18 +63,19 @@ document.addEventListener('sections:loaded', () => {
         d.classList.toggle('is-active', i === closest);
       });
     };
+
     track.addEventListener('scroll', () => {
       window.requestAnimationFrame(syncDots);
     }, { passive: true });
   });
 
-  // Prev/Next arrow buttons — move one slide's width per click
+  // Prev/Next arrow buttons
   document.querySelectorAll('.gallery-prev, .gallery-next').forEach((btn) => {
     btn.addEventListener('click', () => {
       const track = document.getElementById(btn.dataset.target);
       if (!track) return;
       const slide = track.querySelector('.gallery-slide');
-      const step = slide ? slide.clientWidth + 16 : track.clientWidth; // +16 = gap
+      const step = slide ? slide.clientWidth + 16 : track.clientWidth;
       track.scrollBy({
         left: btn.classList.contains('gallery-next') ? step : -step,
         behavior: 'smooth',
@@ -90,21 +87,19 @@ document.addEventListener('sections:loaded', () => {
   const yearEl = document.getElementById('year');
   if (yearEl) yearEl.textContent = new Date().getFullYear();
 
-  // ===== Contact form -> Google Sheet + WhatsApp =====
-  // The form both logs a row to a Google Sheet (via Apps Script web app)
-  // AND builds a pre-filled WhatsApp message so bookings still go
-  // straight to the studio's phone. See google-apps-script.gs for setup.
-  const WHATSAPP_NUMBER = '6282118311020'; // 0821-1831-1020 in international format
-
-  // TODO: ganti dengan Web App URL dari Google Apps Script kamu sendiri
-  // (lihat panduan di file google-apps-script.gs). Contoh:
-  // 'https://script.google.com/macros/s/AKfycb.../exec'
+  // ===== Contact form -> Google Sheet only (NO WhatsApp) =====
+  // TODO: ganti dengan Web App URL dari Google Apps Script kamu sendiri.
   const GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbyXe1TzDDonex39xKdj9YV9LDDKuJyXakJpTRUpbO-wc5wlINLhENk7FohpeUN3pRZ_WA/exec';
 
   const contactForm = document.getElementById('contact-form');
+  const formFeedback = document.getElementById('form-feedback'); // element untuk pesan sukses/gagal
+
   if (contactForm) {
     contactForm.addEventListener('submit', (e) => {
       e.preventDefault();
+
+      const submitBtn = contactForm.querySelector('button[type="submit"]');
+      const originalBtnText = submitBtn ? submitBtn.textContent : 'Kirim';
 
       const name = contactForm.name.value.trim();
       const email = contactForm.email.value.trim();
@@ -114,45 +109,55 @@ document.addEventListener('sections:loaded', () => {
       const therapistInput = contactForm.querySelector('input[name="therapist"]:checked');
       const therapist = therapistInput ? therapistInput.value : '';
 
-      // 1) Kirim ke Google Sheet (diam-diam di background, tidak menghalangi WA).
-      //    Pakai FormData supaya field-nya kebaca sebagai e.parameter di Apps
-      //    Script (nama, email, layanan, terapis, pesan — HARUS sama persis
-      //    dengan yang dibaca di doPost() pada Code.gs).
-      if (GOOGLE_SHEET_URL && GOOGLE_SHEET_URL !== 'https://script.google.com/macros/s/AKfycbyXe1TzDDonex39xKdj9YV9LDDKuJyXakJpTRUpbO-wc5wlINLhENk7FohpeUN3pRZ_WA/exec') {
-        const sheetData = new FormData();
-        sheetData.append('nama', name);
-        sheetData.append('email', email);
-        sheetData.append('layanan', layanan);
-        sheetData.append('terapis', therapist);
-        sheetData.append('pesan', message);
-
-        fetch(GOOGLE_SHEET_URL, {
-          method: 'POST',
-          mode: 'no-cors',
-          body: sheetData,
-        }).catch((err) => console.error('Gagal kirim ke Google Sheet:', err));
+      if (!name || !email || !message) {
+        showFeedback('Nama, email, dan pesan wajib diisi.', 'error');
+        return;
       }
 
-      // 2) Susun pesan WhatsApp seperti sebelumnya.
-      let text =
-        `Halo Matalis Beauty Hub, saya mau booking:%0A` +
-        `Nama: ${encodeURIComponent(name)}%0A` +
-        `Email: ${encodeURIComponent(email)}%0A`;
+      const sheetData = new FormData();
+      sheetData.append('nama', name);
+      sheetData.append('email', email);
+      sheetData.append('layanan', layanan);
+      sheetData.append('terapis', therapist);
+      sheetData.append('pesan', message);
 
-      if (layanan) {
-        text += `Layanan: ${encodeURIComponent(layanan)}%0A`;
+      // Loading state
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Mengirim...';
       }
 
-      if (therapist) {
-        text += `Terapis pilihan: ${encodeURIComponent(therapist)}%0A`;
-      }
-
-      text += `Pesan: ${encodeURIComponent(message)}`;
-
-      const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${text}`;
-      window.open(waUrl, '_blank', 'noopener');
-
-      contactForm.reset();
+      fetch(GOOGLE_SHEET_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        body: sheetData,
+      })
+        .then(() => {
+          showFeedback('Booking berhasil dikirim! Kami akan menghubungi Anda segera.', 'success');
+          contactForm.reset();
+        })
+        .catch((err) => {
+          console.error('Gagal kirim ke Google Sheet:', err);
+          showFeedback('Terjadi kesalahan. Silakan coba lagi nanti.', 'error');
+        })
+        .finally(() => {
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.textContent = originalBtnText;
+          }
+        });
     });
+  }
+
+  function showFeedback(text, type) {
+    if (!formFeedback) return;
+    formFeedback.textContent = text;
+    formFeedback.className = 'form-feedback ' + (type === 'success' ? 'is-success' : 'is-error');
+    formFeedback.hidden = false;
+
+    setTimeout(() => {
+      formFeedback.hidden = true;
+      formFeedback.textContent = '';
+    }, 5000);
   }
 });
