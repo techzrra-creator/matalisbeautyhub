@@ -1,0 +1,185 @@
+/* =========================================================
+   CONTACT.CSS
+   ========================================================= */
+
+.contact { background: var(--color-surface); }
+.contact-inner {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 56px;
+}
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 24px;
+}
+.contact-form label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--foreground);
+  margin-top: 12px;
+}
+.label-optional { font-weight: 400; opacity: 0.7; text-transform: none; letter-spacing: 0; }
+
+/* ----- Service / activity picker (checkboxes) ----- */
+.service-select-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-top: 8px;
+}
+.service-select-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 8px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+}
+.service-select-option:hover { transform: translateY(-2px); }
+.service-select-option input[type="checkbox"] {
+  position: absolute;
+  width: 1px; height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+.service-select-icon {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--color-surface-alt);
+  color: var(--foreground);
+}
+.service-select-icon svg { width: 20px; height: 13px; }
+.service-select-name {
+  font-size: 0.76rem;
+  color: var(--foreground);
+  text-align: center;
+  line-height: 1.25;
+}
+.service-select-option:has(input:checked) {
+  border-color: var(--primary);
+  background: var(--color-surface-alt);
+}
+.service-select-option:has(input:checked) .service-select-name { font-weight: 600; }
+.service-select-option:focus-within { outline: 2px solid var(--primary); outline-offset: 2px; }
+
+/* ----- Therapist picker ----- */
+.therapist-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-top: 8px;
+}
+.therapist-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 8px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+}
+.therapist-option:hover { transform: translateY(-2px); }
+.therapist-option input[type="radio"] {
+  position: absolute;
+  width: 1px; height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+.therapist-photo {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--color-surface-alt);
+  border: 2px solid transparent;
+  transition: border-color 0.2s ease;
+}
+.therapist-photo img { width: 100%; height: 100%; object-fit: cover; }
+.therapist-name {
+  font-size: 0.8rem;
+  color: var(--foreground);
+  text-align: center;
+}
+/* Selected state — highlight with solid white ring, like the primary button */
+.therapist-option:has(input:checked) {
+  border-color: var(--primary);
+  background: var(--color-surface-alt);
+}
+.therapist-option:has(input:checked) .therapist-photo {
+  border-color: var(--primary);
+}
+.therapist-option:has(input:checked) .therapist-name { font-weight: 600; }
+.therapist-option:focus-within { outline: 2px solid var(--primary); outline-offset: 2px; }
+.contact-form input,
+.contact-form textarea {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  padding: 12px 16px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-text);
+  resize: vertical;
+}
+.contact-form input::placeholder,
+.contact-form textarea::placeholder {
+  color: var(--color-muted);
+}
+.contact-form input:focus,
+.contact-form textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+.contact-form button { margin-top: 20px; }
+
+.contact-info-wrap { display: flex; flex-direction: column; gap: 24px; }
+.contact-info-card {
+  background: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 28px;
+}
+.contact-info-card h3 { font-size: 1.1rem; margin-bottom: 16px; }
+.contact-info-card li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--color-border);
+  font-size: 0.92rem;
+  gap: 12px;
+}
+.contact-info-card li:last-child { border-bottom: none; }
+.contact-info-card a:hover { color: var(--color-primary); }
+
+.map-wrap {
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  line-height: 0;
+}
+
+/* ----- Responsive ----- */
+@media (max-width: 1024px) {
+  .contact-inner { gap: 40px; }
+}
+@media (max-width: 840px) {
+  .contact-inner { grid-template-columns: 1fr; }
+}
+@media (max-width: 480px) {
+  .therapist-grid { grid-template-columns: repeat(2, 1fr); }
+  .service-select-grid { grid-template-columns: repeat(2, 1fr); }
+}
