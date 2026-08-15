@@ -127,37 +127,35 @@ document.addEventListener('sections:loaded', () => {
         submitBtn.textContent = 'Mengirim...';
       }
 
-      fetch(GOOGLE_SHEET_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        body: sheetData,
-      })
-        .then(() => {
-          showFeedback('Booking berhasil dikirim! Kami akan menghubungi Anda segera.', 'success');
-          contactForm.reset();
-        })
-        .catch((err) => {
-          console.error('Gagal kirim ke Google Sheet:', err);
-          showFeedback('Terjadi kesalahan. Silakan coba lagi nanti.', 'error');
-        })
-        .finally(() => {
-          if (submitBtn) {
-            submitBtn.disabled = false;
-            submitBtn.textContent = originalBtnText;
-          }
-        });
+ const SHEET_ENDPOINT = 'https://script.google.com/macros/s/XXXX/exec'; // URL /exec, bukan /dev
+
+contactForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const fb = document.getElementById('form-feedback');
+
+  const body = new URLSearchParams({
+    nama:    contactForm.name?.value.trim()      || '',
+    email:   contactForm.email?.value.trim()     || '',
+    layanan: contactForm.service?.value          || '',
+    terapis: contactForm.therapist?.value        || '',
+    pesan:   contactForm.message?.value.trim()   || '',
+  });
+
+  try {
+    await fetch(SHEET_ENDPOINT, {
+      method: 'POST',
+      mode: 'no-cors',                 // Apps Script tidak kirim header CORS
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
+      body,
     });
-  }
-
-  function showFeedback(text, type) {
-    if (!formFeedback) return;
-    formFeedback.textContent = text;
-    formFeedback.className = 'form-feedback ' + (type === 'success' ? 'is-success' : 'is-error');
-    formFeedback.hidden = false;
-
-    setTimeout(() => {
-      formFeedback.hidden = true;
-      formFeedback.textContent = '';
-    }, 5000);
+    fb.hidden = false;
+    fb.className = 'form-feedback is-success';
+    fb.textContent = 'Terima kasih! Booking kamu sudah kami terima.';
+    contactForm.reset();
+  } catch (err) {
+    fb.hidden = false;
+    fb.className = 'form-feedback is-error';
+    fb.textContent = 'Gagal mengirim. Coba lagi ya.';
   }
 });
+
